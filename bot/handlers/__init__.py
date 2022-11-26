@@ -1,4 +1,4 @@
-'''Package of bot handlers, in __init__.py the function of registering all handlers is included'''
+'''Package of bot handlers, in __init__.py the function of registering all handlers and dialogs is included'''
 
 from . import admin
 from . import client

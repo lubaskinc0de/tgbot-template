@@ -4,7 +4,7 @@ import datetime
 
 from typing import TypeVar
 
-from pydantic import BaseModel, Field, condecimal, validator, root_validator
+from pydantic import BaseModel, Field, condecimal, validator
 
 T = TypeVar('T')
 
