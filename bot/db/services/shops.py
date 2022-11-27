@@ -15,7 +15,7 @@ async def create_shop(
     closing_in: datetime.time,
 ) -> None:
 
-    """Create the Shop instance, **kwargs are directly instance fields"""
+    """Create the Shop instance"""
 
     shop = Shop(
         title=title,

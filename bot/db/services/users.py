@@ -14,10 +14,10 @@ async def is_user_exists(session: Session, id: int) -> bool:
     return res.scalar()
 
 
-async def create_user(session: Session, **kwargs) -> None:
-    """Create the User instance, **kwargs are directly instance fields"""
+async def create_user(session: Session, id: int) -> None:
+    """Create the User instance"""
 
-    user = User(**kwargs)
+    user = User(id=id)
     session.add(user)
     await session.commit()
 

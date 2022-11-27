@@ -10,7 +10,7 @@ from db.services.service_categories import get_service_category
 async def create_service(
     session: Session, category_id: int, title: str, description: str
 ) -> Service:
-    """Create the ServiceCategory instance, **kwargs are directly instance fields without category_id"""
+    """Create the ServiceCategory instance"""
 
     service = Service(title=title, description=description)
 

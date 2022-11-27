@@ -17,8 +17,7 @@ async def create_item(
     category_id: int,
 ) -> None:
     """
-    Create the Item instance, shops are list of (shop_id, quantity), photos are list of (file_id),
-    **kwargs are directly instance fields without shops
+    Create the Item instance, shops are list of (shop_id, quantity), photos are list of (file_id)
     """
 
     category = await get_category(session, category_id)
