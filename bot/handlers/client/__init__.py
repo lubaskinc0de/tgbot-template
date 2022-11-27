@@ -13,14 +13,16 @@ from .user_items import user_items_dialog
 
 from aiogram_dialog import DialogRegistry
 
-def register_handlers(dp: Dispatcher):
-    '''Register all client-side handlers'''
 
-    dp.message.register(start, Command(commands='start'))
+def register_handlers(dp: Dispatcher):
+    """Register all client-side handlers"""
+
+    dp.message.register(start, Command(commands="start"))
+
 
 def register_dialogs(registry: DialogRegistry):
     registry.register(start_dialog)
-    
+
     registry.register(categories_dialog)
     registry.register(category_items_dialog)
     registry.register(item_dialog)

@@ -22,10 +22,12 @@ from aiogram_dialog import DialogRegistry
 
 from filters.admin import IsAdminFilter
 
-def register_handlers(dp: Dispatcher):
-    '''Register all admin-side handlers'''
 
-    dp.message.register(admin, Command(commands='admin'), IsAdminFilter())
+def register_handlers(dp: Dispatcher):
+    """Register all admin-side handlers"""
+
+    dp.message.register(admin, Command(commands="admin"), IsAdminFilter())
+
 
 def register_dialogs(registry: DialogRegistry):
     registry.register(admin_dialog)

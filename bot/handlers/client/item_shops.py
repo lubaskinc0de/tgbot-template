@@ -1,6 +1,4 @@
-'''Item shops client-side handlers'''
-
-import operator
+"""Item shops client-side handlers"""
 
 from aiogram_dialog import Window, Dialog
 
@@ -11,21 +9,21 @@ from dialog.dialog_state import ItemShopsSG
 from dialog.data_getters import get_item_shops_data
 
 item_shops_window = Window(
-    Const('Магазины в которых есть товар:'),
+    Const("Магазины в которых есть товар:"),
     ScrollingGroup(
         Select(
-            Format('{item[0]} ({item[3]} штук/и) {item[1]}'),
-            'itemdetailshopssel',
-            operator.itemgetter(2),
-            'item_shops',
-            ),
+            Format("{item.shop.title} ({item.quantity} штук/и) {item.shop.address}"),
+            "itemdetailshopssel",
+            lambda item_shop: item_shop.shop_id,
+            "item_shops",
+        ),
         width=2,
         height=4,
-        id='itemdetailshops',
+        id="itemdetailshops",
     ),
-    Cancel(Const('Назад')),
+    Cancel(Const("Назад")),
     state=ItemShopsSG.item_shops,
-    getter=get_item_shops_data
-    )
+    getter=get_item_shops_data,
+)
 
 item_shops_dialog = Dialog(item_shops_window)

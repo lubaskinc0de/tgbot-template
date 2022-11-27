@@ -1,6 +1,4 @@
-'''Admin-side delete item handlers'''
-
-import operator
+"""Admin-side delete item handlers"""
 
 from typing import Any
 
@@ -17,61 +15,70 @@ from db.services.items import delete_item as delete_item_service
 
 from sqlalchemy.exc import DBAPIError
 
-async def delete_item(call: types.CallbackQuery, widget: Any, manager: DialogManager, item_id: str):
-    '''Delete item'''
+
+async def delete_item(
+    call: types.CallbackQuery, widget: Any, manager: DialogManager, item_id: str
+):
+    """Delete item"""
 
     try:
-        await delete_item_service(manager.middleware_data.get('db_session'), int(item_id))
-        await call.answer('Товар успешно удален!')
+        await delete_item_service(
+            manager.middleware_data.get("db_session"), int(item_id)
+        )
+        await call.answer("Товар успешно удален!")
     except DBAPIError:
-        await call.answer('Произошла ошибка при удалении товара!')
-    
+        await call.answer("Произошла ошибка при удалении товара!")
+
     await manager.done()
 
+
 select_item_to_delete_window = Window(
-    Const('Выберите товар для удаления'),
+    Const("Выберите товар для удаления"),
     ScrollingGroup(
         Select(
-            Format('{item[0]}'),
-            'selittodelsel',
-            operator.itemgetter(1),
-            'category_items',
+            Format("{item.title}"),
+            "selittodelsel",
+            lambda item: item.id,
+            "category_items",
             on_click=delete_item,
-            ),
+        ),
         width=2,
         height=4,
-        id='selittodel',
+        id="selittodel",
     ),
-    Cancel(Const('Отмена')),
+    Cancel(Const("Отмена")),
     state=DeleteItemSG.list_of_category_items_to_delete,
     getter=get_category_items_data,
-    )
+)
 
-async def list_of_category_items_to_delete(call: types.CallbackQuery, widget: Any, manager: DialogManager, category_id: str):
-    '''Get list of category items to delete'''
 
-    manager.dialog_data['category_id'] = int(category_id)
+async def list_of_category_items_to_delete(
+    call: types.CallbackQuery, widget: Any, manager: DialogManager, category_id: str
+):
+    """Get list of category items to delete"""
+
+    manager.dialog_data["category_id"] = int(category_id)
 
     await manager.switch_to(DeleteItemSG.list_of_category_items_to_delete)
 
+
 categories_window = Window(
-    Const('Выберите категорию товаров'),
+    Const("Выберите категорию товаров"),
     ScrollingGroup(
         Select(
-            Format('{item[0]}'),
-            'itemdelcatselsel',
-            operator.itemgetter(1),
-            'categories',
-            on_click=list_of_category_items_to_delete
-            ),
+            Format("{item.title}"),
+            "itemdelcatselsel",
+            lambda category: category.id,
+            "categories",
+            on_click=list_of_category_items_to_delete,
+        ),
         width=2,
         height=4,
-        id='itemdelcatsel',
+        id="itemdelcatsel",
     ),
-    Cancel(Const('Отмена')),
+    Cancel(Const("Отмена")),
     state=DeleteItemSG.list_of_items_categories,
-    getter=get_categories_data
-    )
+    getter=get_categories_data,
+)
 
 delete_item_dialog = Dialog(categories_window, select_item_to_delete_window)
-

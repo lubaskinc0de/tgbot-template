@@ -1,4 +1,4 @@
-'''Bot database package, __init__.py includes Base model.'''
+"""Bot database package, __init__.py includes Base model."""
 
 from .models import Base
 
