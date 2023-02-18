@@ -5,6 +5,8 @@ from sqlalchemy import select, func, delete
 
 from db.models import ServiceCategory
 
+from schemas.admin import ServiceCategoryModel
+
 
 async def get_service_categories(session: Session) -> list[ServiceCategory]:
     """Select all service categories"""
@@ -37,10 +39,12 @@ async def get_service_category(
     return res.scalar()
 
 
-async def create_service_category(session: Session, title: str) -> None:
+async def create_service_category(
+    session: Session, service_category_obj: ServiceCategoryModel
+) -> None:
     """Create the ServiceCategory instance"""
 
-    service_category = ServiceCategory(title=title)
+    service_category = ServiceCategory(title=service_category_obj.title)
 
     session.add(service_category)
     await session.commit()

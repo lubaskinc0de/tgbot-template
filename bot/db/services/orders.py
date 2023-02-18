@@ -10,6 +10,8 @@ from db.services.users import get_user, get_user_item
 from db.services.shops import get_shop
 from db.services.services import get_service
 
+from schemas.client import OrderModel
+
 
 async def get_unpaid_orders(session: Session) -> list[Order]:
     """Get unpaid orders"""
@@ -57,39 +59,34 @@ async def get_unpaid_orders_count(session: Session) -> list[Order]:
 
 async def create_order(
     session: Session,
-    user_id: int,
-    shop_id: int = None,
-    summ: float = None,
-    quantity: int = None,
-    item_id: int = None,
-    service_id: int = None,
+    order_obj: OrderModel,
 ) -> Order:
     """Create the Order instance"""
 
     order = Order()
 
-    if item_id:
-        item = await get_item(session, item_id)
+    if order_obj.item_id:
+        item = await get_item(session, order_obj.item_id)
         order.item = item
 
-    if shop_id:
-        shop = await get_shop(session, shop_id)
+    if order_obj.shop_id:
+        shop = await get_shop(session, order_obj.shop_id)
         order.shop = shop
 
-    if quantity:
-        order.quantity = quantity
+    if order_obj.quantity:
+        order.quantity = order_obj.quantity
 
-    if service_id:
-        service = await get_service(session, service_id)
+    if order_obj.service_id:
+        service = await get_service(session, order_obj.service_id)
         order.service = service
 
-    user = await get_user(session, user_id)
+    user = await get_user(session, order_obj.user_id)
 
     order.user = user
-    order.summ = summ
+    order.summ = order_obj.summ
 
-    if item_id:
-        item_shop = await get_item_shop(session, item_id, shop_id)
+    if order_obj.item_id:
+        item_shop = await get_item_shop(session, order_obj.item_id, order_obj.shop_id)
         item_shop.quantity = item_shop.quantity - order.quantity
 
     session.add(order)
@@ -109,7 +106,7 @@ async def pay_order(session: Session, order_id: int) -> None:
         if user_item:
             user_item.quantity = user_item.quantity + order.quantity
         else:
-            await session.add(
+            session.add(
                 UserItem(
                     user_id=order.user_id,
                     item_id=order.item_id,

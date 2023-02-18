@@ -34,7 +34,7 @@ async def get_order_data(
 
     order_id: int = dialog_manager.dialog_data.get("order_id")
 
-    admins = await get_admins(bot, config)
+    admins = await get_admins(bot, config.bot.admins)
 
     return {"order_id": order_id, "admins": "\n".join(admins)}
 
@@ -61,7 +61,8 @@ async def set_service_description(
         service = ServiceModel(**manager.dialog_data)
         service_id = (
             await create_service(
-                db_session, service.category_id, **service.dict(exclude={"category_id"})
+                db_session,
+                service,
             )
         ).id
 
@@ -72,7 +73,7 @@ async def set_service_description(
         )
 
         order = await create_order(
-            manager.middleware_data.get("db_session"), **order.dict()
+            manager.middleware_data.get("db_session"), order
         )
 
         await message.answer("Заказ успешно создан!")

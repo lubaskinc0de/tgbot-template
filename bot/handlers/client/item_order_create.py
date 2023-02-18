@@ -81,7 +81,8 @@ async def set_order_quantity(
         )
 
         order = await create_order(
-            manager.middleware_data.get("db_session"), **order.dict()
+            manager.middleware_data.get("db_session"),
+            order,
         )
 
         await message.answer("Заказ успешно создан!")

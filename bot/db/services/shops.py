@@ -1,28 +1,24 @@
-import datetime
-
 from sqlalchemy.orm import Session
 from sqlalchemy import select, func, delete
 
 from db.models import Shop
 
+from schemas.admin import ShopModel
+
 
 async def create_shop(
     session: Session,
-    title: str,
-    address: str,
-    phone: str,
-    opening_in: datetime.time,
-    closing_in: datetime.time,
+    shop_obj: ShopModel,
 ) -> None:
 
     """Create the Shop instance"""
 
     shop = Shop(
-        title=title,
-        address=address,
-        phone=phone,
-        opening_in=opening_in,
-        closing_in=closing_in,
+        title=shop_obj.title,
+        address=shop_obj.address,
+        phone=shop_obj.phone,
+        opening_in=shop_obj.opening_in,
+        closing_in=shop_obj.closing_in,
     )
     session.add(shop)
     await session.commit()

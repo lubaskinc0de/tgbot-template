@@ -31,7 +31,7 @@ async def create_service_category_success(
     try:
         service_category = ServiceCategoryModel(title=input)
         await create_service_category_service(
-            manager.middleware_data.get("db_session"), **service_category.dict()
+            manager.middleware_data.get("db_session"), service_category
         )
 
         await message.answer("Категория услуг успешно добавлена!")

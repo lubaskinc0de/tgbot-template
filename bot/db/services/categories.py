@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select, func, delete
 
 from db.models import Category
+from schemas.admin import CategoryModel
 
 
 async def get_categories(session: Session) -> list[Category]:
@@ -35,10 +36,10 @@ async def get_category(session: Session, category_id: int) -> Category:
     return res.scalar()
 
 
-async def create_category(session: Session, title: str) -> None:
+async def create_category(session: Session, category_obj: CategoryModel) -> None:
     """Create the Category instance"""
 
-    category = Category(title=title)
+    category = Category(title=category_obj.title)
 
     session.add(category)
     await session.commit()

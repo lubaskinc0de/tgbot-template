@@ -48,7 +48,7 @@ async def get_order_data(
     order_id: int = dialog_manager.start_data.get("order_id")
 
     order = await get_order(db_session, order_id)
-    order_customer = await get_user_username(order.user_id, bot, config)
+    order_customer = await get_user_username(order.user_id, bot)
     order_type = "Товар" if order.item_id else "Услуга"
     order_price = f"{order.item.price} руб." if order.item_id else "Договорная"
     order_service_description = order.service.description if order.service_id else None

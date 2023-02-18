@@ -31,7 +31,8 @@ async def set_shop_closing_in(
     try:
         shop = ShopModel(**manager.dialog_data)
         await create_shop_service(
-            manager.middleware_data.get("db_session"), **shop.dict()
+            manager.middleware_data.get("db_session"),
+            shop,
         )
 
         await message.answer("Магазин успешно добавлен!")

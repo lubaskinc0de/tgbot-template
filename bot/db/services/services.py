@@ -6,15 +6,15 @@ from sqlalchemy import select
 from db.models import Service
 from db.services.service_categories import get_service_category
 
+from schemas.client import ServiceModel
 
-async def create_service(
-    session: Session, category_id: int, title: str, description: str
-) -> Service:
+
+async def create_service(session: Session, service_obj: ServiceModel) -> Service:
     """Create the ServiceCategory instance"""
 
-    service = Service(title=title, description=description)
+    service = Service(title=service_obj.title, description=service_obj.description)
 
-    category = await get_service_category(session, category_id)
+    category = await get_service_category(session, service_obj.category_id)
     service.category = category
 
     session.add(service)

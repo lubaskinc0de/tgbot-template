@@ -43,9 +43,7 @@ async def set_item_shops(message: types.Message, widget: Any, manager: DialogMan
 
         await create_item_service(
             manager.middleware_data.get("db_session"),
-            item.shops,
-            item.photos,
-            **item.dict(exclude={"shops", "photos"})
+            item,
         )
 
         await message.answer("Товар успешно добавлен!")

@@ -6,26 +6,23 @@ from sqlalchemy import select, func, delete
 from db.models import Item, ItemShop, ItemPhoto
 from db.services.categories import get_category
 
+from schemas.admin import ItemModel
+
 
 async def create_item(
     session: Session,
-    shops: list[tuple[int, int]],
-    photos: list[str],
-    title: str,
-    description: str,
-    price: float,
-    category_id: int,
+    item_obj: ItemModel,
 ) -> None:
     """
     Create the Item instance, shops are list of (shop_id, quantity), photos are list of (file_id)
     """
 
-    category = await get_category(session, category_id)
+    category = await get_category(session, item_obj.category_id)
 
     item = Item(
-        title=title,
-        description=description,
-        price=price,
+        title=item_obj.title,
+        description=item_obj.description,
+        price=item_obj.price,
     )
 
     item.category = category
@@ -33,13 +30,13 @@ async def create_item(
     item_shop_objects = []
     item_photo_objects = []
 
-    for shop_id, quantity in shops:
+    for shop_id, quantity in item_obj.shops:
         obj = ItemShop(quantity=quantity)
         obj.shop_id = shop_id
 
         item_shop_objects.append(obj)
 
-    for photo_id in photos:
+    for photo_id in item_obj.photos:
         obj = ItemPhoto(file_id=photo_id)
         item_photo_objects.append(obj)
 
@@ -99,8 +96,6 @@ async def get_item_shops(
 ) -> list[ItemShop]:
     """
     Get item shops
-
-    :param bool show_empty=False: show ItemShop's where quantity == 0
     """
 
     q = (
@@ -122,7 +117,6 @@ async def get_item_shops_count(
 ) -> list[ItemShop]:
     """
     Get item shops count
-    :param bool show_empty=False: show ItemShop's where quantity == 0
     """
 
     q = select(func.count(ItemShop.item_id)).where(ItemShop.item_id == item_id)

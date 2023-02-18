@@ -6,18 +6,18 @@ from sqlalchemy import select, exists, func
 from db.models import User, UserItem
 
 
-async def is_user_exists(session: Session, id: int) -> bool:
+async def is_user_exists(session: Session, user_id: int) -> bool:
     """Checks for the presence of a user with the passed id"""
 
-    q = select(exists().where(User.id == id))
+    q = select(exists().where(User.id == user_id))
     res = await session.execute(q)
     return res.scalar()
 
 
-async def create_user(session: Session, id: int) -> None:
+async def create_user(session: Session, user_id: int) -> None:
     """Create the User instance"""
 
-    user = User(id=id)
+    user = User(id=user_id)
     session.add(user)
     await session.commit()
 

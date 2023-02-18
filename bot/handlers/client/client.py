@@ -45,7 +45,7 @@ async def start(
     is_user_register = await is_user_exists(db_session, user_id)
 
     if not is_user_register:
-        await create_user(db_session, id=user_id)
+        await create_user(db_session, user_id=user_id)
 
     await dialog_manager.start(ClientSG.start, mode=StartMode.RESET_STACK)
 
