@@ -9,6 +9,7 @@ from sqlalchemy import (
     Numeric,
     Time,
     Boolean,
+    BigInteger
 )
 from sqlalchemy.orm import relationship, declarative_base
 
@@ -19,7 +20,7 @@ class UserItem(Base):
     __tablename__ = "user_item"
 
     user_id = Column(
-        Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+        BigInteger, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
     )
     item_id = Column(
         Integer, ForeignKey("items.id", ondelete="CASCADE"), primary_key=True
@@ -133,7 +134,7 @@ class Order(Base):
     service = relationship("Service", back_populates="orders")
 
     user_id = Column(
-        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+        BigInteger, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
     user = relationship("User", back_populates="orders")
 
@@ -154,7 +155,7 @@ class Order(Base):
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, autoincrement=False)
+    id = Column(BigInteger, primary_key=True, autoincrement=False)
 
     items = relationship("UserItem", back_populates="user")
     orders = relationship("Order", back_populates="user")
